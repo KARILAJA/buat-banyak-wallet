@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 // 1. Fungsi Membuat Wallet (Keypair)
 function createWallet() {
@@ -41,9 +42,23 @@ function createMultipleWallets(count) {
     return wallets;
 }
 
-// Eksekusi: Membuat 5 Wallet
+// 4. Menyimpan Wallet ke File t.txt
+function saveWalletsToFile(wallets, filename) {
+    const data = wallets.map(wallet => `
+=== Wallet ${wallet.id} ===
+Public Key: ${wallet.publicKey}
+Private Key: ${wallet.privateKey}
+Access Token: ${wallet.accessToken}
+`).join('\n');
+
+    fs.writeFileSync(filename, data, 'utf-8');
+    console.log(`\n✅ Wallets berhasil disimpan ke file ${filename}`);
+}
+
+// Eksekusi: Membuat 5 Wallet dan Simpan ke t.txt
 const walletCount = 5;
 const wallets = createMultipleWallets(walletCount);
+saveWalletsToFile(wallets, 't.txt');
 
 // Menampilkan Hasil
 wallets.forEach(wallet => {
